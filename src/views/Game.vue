@@ -17,18 +17,17 @@
   import { ref, type Ref } from 'vue'
   // import gameOverSound from '../assets/game-over.mp3'
 
-  const { createBoard } = useBoardStore()
+  const { resetBoard } = useBoardStore()
 
   const gameOver: Ref<boolean> = ref(false)
 
   const showGameOverScreen = () => {
     gameOver.value = true
-    console.log('🏁 game over!')
     // new Audio(gameOverSound).play()
   }
 
   const newGame = () => {
-    createBoard()
+    resetBoard()
     gameOver.value = false
   }
 

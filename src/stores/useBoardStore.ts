@@ -14,14 +14,14 @@ export const useBoardStore = defineStore('board', () => {
   const { createCell } = useCell()
 
   const createBoard = () => {
-    currentBoard.value = { rows: [], active: true }
     let count = 1
+    currentBoard.value = { rows: [], active: true }
     for (let r = 0; r < boardRows; r++) {
-      const row: Row = { cells: [] }
+      currentBoard.value.rows[r] = { cells: [] }
       for (let c = 0; c < boardColumns; c++) {
-        row.cells.push(createCell({ id: count++, row: r, column: c }))
+        count++
+        currentBoard.value.rows[r].cells.push(createCell({ id: count, row: r, column: c }))
       }
-      currentBoard.value.rows.push(row)
     }
     addMines()
   }
@@ -61,8 +61,21 @@ export const useBoardStore = defineStore('board', () => {
   }
 
   const nearbyMineCount = (location: Cell) => {
-    if (!location) return 0
-    return getNearbyCells(location).reduce((count, cell) => count + (cell.isMine ? 1 : 0), 0)
+    if (location === undefined) return 0
+    const result = getNearbyCells(location).filter((cell) => cell.isMine)
+    return result.length || 0
+  }
+
+  const clearNearbyCells = (cell: Cell) => {
+    if (cell.isMine || cell.visible) return
+
+    cell.visible = true
+
+    if (nearbyMineCount(cell) !== 0) return
+
+    getNearbyCells(cell)
+      .filter((nearbyCell) => nearbyCell && !nearbyCell.isMine && !nearbyCell.visible)
+      .forEach(clearNearbyCells)
   }
 
   const resetBoard = () => {
@@ -73,5 +86,13 @@ export const useBoardStore = defineStore('board', () => {
     return boardColumns * boardRows
   })
 
-  return { boardSize, currentBoard, createBoard, resetBoard, nearbyMineCount, getNearbyCells }
+  return {
+    boardSize,
+    currentBoard,
+    createBoard,
+    resetBoard,
+    nearbyMineCount,
+    getNearbyCells,
+    clearNearbyCells,
+  }
 })
