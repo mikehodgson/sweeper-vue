@@ -21,12 +21,20 @@ describe('Cell.vue', () => {
         plugins: [createTestingPinia({ createSpy: vi.fn })],
       },
     })
-    expect(wrapper.findComponent(Cell).props().modelValue.id).toBe(1)
-    expect(wrapper.findComponent(Cell).props().modelValue.visible).toBe(true)
-    expect(wrapper.findComponent(Cell).props().modelValue.isMine).toBe(false)
-    expect(wrapper.findComponent(Cell).props().modelValue.isFlagged).toBe(false)
-    expect(wrapper.findComponent(Cell).props().modelValue.row).toBe(0)
-    expect(wrapper.findComponent(Cell).props().modelValue.column).toBe(0)
+    expect((wrapper.props() as unknown as { modelValue: { id: number } }).modelValue.id).toBe(1)
+    expect(
+      (wrapper.props() as unknown as { modelValue: { visible: boolean } }).modelValue.visible,
+    ).toBe(true)
+    expect(
+      (wrapper.props() as unknown as { modelValue: { isMine: boolean } }).modelValue.isMine,
+    ).toBe(false)
+    expect(
+      (wrapper.props() as unknown as { modelValue: { isFlagged: boolean } }).modelValue.isFlagged,
+    ).toBe(false)
+    expect((wrapper.props() as unknown as { modelValue: { row: number } }).modelValue.row).toBe(0)
+    expect(
+      (wrapper.props() as unknown as { modelValue: { column: number } }).modelValue.column,
+    ).toBe(0)
   })
 
   it('emits event when cell is clicked', async () => {
@@ -108,7 +116,7 @@ describe('Cell.vue', () => {
       },
     })
     await wrapper.trigger('mousedown')
-    expect(wrapper.findComponent(Cell).vm.isHighlighted).toBe(true)
+    expect((wrapper.vm as unknown as { isHighlighted: boolean }).isHighlighted).toBe(true)
   })
 
   it('removes highlight on mouseup', async () => {
@@ -130,7 +138,7 @@ describe('Cell.vue', () => {
     })
     await wrapper.trigger('mousedown')
     await wrapper.trigger('mouseup')
-    expect(wrapper.findComponent(Cell).vm.isHighlighted).toBe(false)
+    expect((wrapper.vm as unknown as { isHighlighted: boolean }).isHighlighted).toBe(false)
   })
 
   it('removes highlight on mouseleave', async () => {
@@ -152,7 +160,7 @@ describe('Cell.vue', () => {
     })
     await wrapper.trigger('mousedown')
     await wrapper.trigger('mouseleave')
-    expect(wrapper.findComponent(Cell).vm.isHighlighted).toBe(false)
+    expect((wrapper.vm as unknown as { isHighlighted: boolean }).isHighlighted).toBe(false)
   })
   it('should toggle isFlagged when setFlagged is called', async () => {
     const wrapper = mount(Cell, {
@@ -171,11 +179,15 @@ describe('Cell.vue', () => {
         plugins: [createTestingPinia({ createSpy: vi.fn })],
       },
     })
-    const event = new MouseEvent('contextmenu')
-    await wrapper.findComponent(Cell).vm.setFlagged(event)
-    expect(wrapper.vm.modelValue.isFlagged).toBe(true)
-    await wrapper.findComponent(Cell).vm.setFlagged(event)
-    expect(wrapper.vm.modelValue.isFlagged).toBe(false)
+    const event: MouseEvent = new MouseEvent('contextmenu')
+    ;(wrapper.vm as unknown as { setFlagged: (event: MouseEvent) => boolean }).setFlagged(event)
+    expect(
+      (wrapper.vm as unknown as { modelValue: { isFlagged: boolean } }).modelValue.isFlagged,
+    ).toBe(true)
+    ;(wrapper.vm as unknown as { setFlagged: (event: MouseEvent) => boolean }).setFlagged(event)
+    expect(
+      (wrapper.vm as unknown as { modelValue: { isFlagged: boolean } }).modelValue.isFlagged,
+    ).toBe(false)
   })
 
   it('should not toggle isFlagged when disabled', async () => {
@@ -196,8 +208,10 @@ describe('Cell.vue', () => {
       },
     })
     const event = new MouseEvent('contextmenu')
-    await wrapper.findComponent(Cell).vm.setFlagged(event)
-    expect(wrapper.vm.modelValue.isFlagged).toBe(false)
+    ;(wrapper.vm as unknown as { setFlagged: (event: MouseEvent) => boolean }).setFlagged(event)
+    expect(
+      (wrapper.vm as unknown as { modelValue: { isFlagged: boolean } }).modelValue.isFlagged,
+    ).toBe(false)
   })
 
   it('should emit cell-flagged event', async () => {
@@ -218,7 +232,7 @@ describe('Cell.vue', () => {
       },
     })
     const event = new MouseEvent('contextmenu')
-    await wrapper.findComponent(Cell).vm.setFlagged(event)
+    ;(wrapper.vm as unknown as { setFlagged: (event: MouseEvent) => boolean }).setFlagged(event)
     expect(wrapper.emitted()).toHaveProperty('cell-flagged')
   })
 })

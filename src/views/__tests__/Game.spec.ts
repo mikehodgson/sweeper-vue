@@ -58,33 +58,33 @@ describe('Game.vue', () => {
 
   it('shows "Game Over!" screen when game is over', async () => {
     await wrapper.vm.$nextTick()
-    wrapper.findComponent(Game).vm.showGameOverScreen()
+    ;(wrapper.vm as unknown as { showGameOverScreen: () => void }).showGameOverScreen()
     await wrapper.vm.$nextTick()
     expect(wrapper.find('.game-over-screen').exists()).toBe(true)
     expect(wrapper.find('.game-over-screen').text()).toBe('Game Over!')
   })
 
   it('resets gameOver when newGame is called', async () => {
-    wrapper.findComponent(Game).vm.showGameOverScreen()
+    ;(wrapper.vm as unknown as { showGameOverScreen: () => void }).showGameOverScreen()
     await wrapper.vm.$nextTick()
-    wrapper.findComponent(Game).vm.newGame()
+    ;(wrapper.vm as unknown as { newGame: () => void }).newGame()
     await wrapper.vm.$nextTick()
-    expect(wrapper.findComponent(Game).vm.gameOver).toBe(false)
+    expect((wrapper.vm as unknown as { gameOver: boolean }).gameOver).toBe(false)
   })
 
   it('displays "New Game" button when game is over', async () => {
-    wrapper.findComponent(Game).vm.showGameOverScreen()
+    ;(wrapper.vm as unknown as { showGameOverScreen: () => void }).showGameOverScreen()
     await wrapper.vm.$nextTick()
     expect(wrapper.find('button').exists()).toBe(true)
     expect(wrapper.find('button').text()).toBe('New Game')
   })
 
   it('game should be reset when "New Game" button is clicked', async () => {
-    const spy = vi.spyOn(wrapper.findComponent(Game).vm, 'newGame')
-    wrapper.findComponent(Game).vm.showGameOverScreen()
+    const spy = vi.spyOn(wrapper.vm as unknown as { newGame: () => void }, 'newGame')
+    ;(wrapper.vm as unknown as { showGameOverScreen: () => void }).showGameOverScreen()
     await wrapper.vm.$nextTick()
     await wrapper.find('button').trigger('click')
     expect(spy).toHaveBeenCalled()
-    expect(wrapper.findComponent(Game).vm.gameOver).toBe(false)
+    expect((wrapper.vm as unknown as { gameOver: boolean }).gameOver).toBe(false)
   })
 })
