@@ -28,7 +28,7 @@ describe('Board.vue', () => {
     const cell = { isMine: true, visible: false, row: 0, column: 0, disabled: false }
     store.currentBoard = { rows: [{ cells: [cell] }], active: true }
 
-    await wrapper.vm.bombFound(cell)
+    await wrapper.findComponent(Board).vm.bombFound(cell)
     expect(cell.visible).toBe(true)
     expect(wrapper.emitted('game-over')).toBeTruthy()
   })
@@ -41,7 +41,7 @@ describe('Board.vue', () => {
     const nearbyCell = { isMine: false, visible: false, row: 1, column: 0, disabled: false }
     currentBoard.value = { rows: [{ cells: [cell, nearbyCell] }], active: true }
 
-    await wrapper.vm.cellCleared(cell)
+    await wrapper.findComponent(Board).vm.cellCleared(cell)
     expect(cell.visible).toBe(true)
     expect(nearbyCell.visible).toBe(true)
   })

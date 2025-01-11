@@ -109,7 +109,7 @@ describe('Cell.vue', () => {
       },
     })
     await wrapper.trigger('mousedown')
-    expect(wrapper.vm.isHighlighted).toBe(true)
+    expect(wrapper.findComponent(Cell).vm.isHighlighted).toBe(true)
   })
 
   it('removes highlight on mouseup', async () => {
@@ -131,7 +131,7 @@ describe('Cell.vue', () => {
     })
     await wrapper.trigger('mousedown')
     await wrapper.trigger('mouseup')
-    expect(wrapper.vm.isHighlighted).toBe(false)
+    expect(wrapper.findComponent(Cell).vm.isHighlighted).toBe(false)
   })
 
   it('removes highlight on mouseleave', async () => {
@@ -153,7 +153,7 @@ describe('Cell.vue', () => {
     })
     await wrapper.trigger('mousedown')
     await wrapper.trigger('mouseleave')
-    expect(wrapper.vm.isHighlighted).toBe(false)
+    expect(wrapper.findComponent(Cell).vm.isHighlighted).toBe(false)
   })
   it('should toggle isFlagged when setFlagged is called', async () => {
     const wrapper = mount(Cell, {
@@ -173,9 +173,9 @@ describe('Cell.vue', () => {
       },
     })
     const event = new MouseEvent('contextmenu')
-    await wrapper.vm.setFlagged(event)
+    await wrapper.findComponent(Cell).vm.setFlagged(event)
     expect(wrapper.vm.modelValue.isFlagged).toBe(true)
-    await wrapper.vm.setFlagged(event)
+    await wrapper.findComponent(Cell).vm.setFlagged(event)
     expect(wrapper.vm.modelValue.isFlagged).toBe(false)
   })
 
@@ -197,7 +197,7 @@ describe('Cell.vue', () => {
       },
     })
     const event = new MouseEvent('contextmenu')
-    await wrapper.vm.setFlagged(event)
+    await wrapper.findComponent(Cell).vm.setFlagged(event)
     expect(wrapper.vm.modelValue.isFlagged).toBe(false)
   })
 
@@ -219,7 +219,7 @@ describe('Cell.vue', () => {
       },
     })
     const event = new MouseEvent('contextmenu')
-    await wrapper.vm.setFlagged(event)
+    await wrapper.findComponent(Cell).vm.setFlagged(event)
     expect(wrapper.emitted()).toHaveProperty('cell-flagged')
   })
 })

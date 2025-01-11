@@ -5,11 +5,30 @@ import BoardComponent from '@/components/Board.vue'
 import { useBoardStore } from '@/stores/useBoardStore'
 import { createTestingPinia } from '@pinia/testing'
 import { afterEach } from 'vitest'
+import { createI18n } from 'vue-i18n'
+
+const i18n = createI18n({
+  legacy: false,
+  locale: 'en',
+  fallbackLocale: 'en',
+  messages: {
+    en: {
+      title: 'Sweeper',
+      new_game: 'New Game',
+      game_over: 'Game Over!',
+    },
+    fr: {
+      title: 'Démineur',
+      new_game: 'Nouvelle partie',
+      game_over: 'Jeu terminé!',
+    },
+  },
+})
 
 const createWrapper = () => {
   return mount(Game, {
     global: {
-      plugins: [createTestingPinia({ createSpy: vi.fn, stubActions: true })],
+      plugins: [createTestingPinia({ createSpy: vi.fn, stubActions: true }), i18n],
     },
   })
 }
@@ -30,7 +49,7 @@ describe('Game.vue', () => {
   })
 
   it('renders the header', () => {
-    expect(wrapper.find('h1').text()).toBe('sweeper')
+    expect(wrapper.find('h1').text()).toBe('Sweeper')
   })
 
   it('renders the BoardComponent', () => {
@@ -39,33 +58,33 @@ describe('Game.vue', () => {
 
   it('shows "Game Over!" screen when game is over', async () => {
     await wrapper.vm.$nextTick()
-    wrapper.vm.showGameOverScreen()
+    wrapper.findComponent(Game).vm.showGameOverScreen()
     await wrapper.vm.$nextTick()
     expect(wrapper.find('.game-over-screen').exists()).toBe(true)
     expect(wrapper.find('.game-over-screen').text()).toBe('Game Over!')
   })
 
   it('resets gameOver when newGame is called', async () => {
-    wrapper.vm.showGameOverScreen()
+    wrapper.findComponent(Game).vm.showGameOverScreen()
     await wrapper.vm.$nextTick()
-    wrapper.vm.newGame()
+    wrapper.findComponent(Game).vm.newGame()
     await wrapper.vm.$nextTick()
-    expect(wrapper.vm.gameOver).toBe(false)
+    expect(wrapper.findComponent(Game).vm.gameOver).toBe(false)
   })
 
   it('displays "New Game" button when game is over', async () => {
-    wrapper.vm.showGameOverScreen()
+    wrapper.findComponent(Game).vm.showGameOverScreen()
     await wrapper.vm.$nextTick()
     expect(wrapper.find('button').exists()).toBe(true)
     expect(wrapper.find('button').text()).toBe('New Game')
   })
 
   it('game should be reset when "New Game" button is clicked', async () => {
-    const spy = vi.spyOn(wrapper.vm, 'newGame')
-    wrapper.vm.showGameOverScreen()
+    const spy = vi.spyOn(wrapper.findComponent(Game).vm, 'newGame')
+    wrapper.findComponent(Game).vm.showGameOverScreen()
     await wrapper.vm.$nextTick()
     await wrapper.find('button').trigger('click')
     expect(spy).toHaveBeenCalled()
-    expect(wrapper.vm.gameOver).toBe(false)
+    expect(wrapper.findComponent(Game).vm.gameOver).toBe(false)
   })
 })
