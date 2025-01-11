@@ -2,7 +2,6 @@ import { mount } from '@vue/test-utils'
 import { describe, it, expect, vi } from 'vitest'
 import Cell from '../Cell.vue'
 import { createTestingPinia } from '@pinia/testing'
-import { ref } from 'vue'
 
 describe('Cell.vue', () => {
   it('renders cell with correct props', () => {
@@ -22,12 +21,12 @@ describe('Cell.vue', () => {
         plugins: [createTestingPinia({ createSpy: vi.fn })],
       },
     })
-    expect(wrapper.props().modelValue.id).toBe(1)
-    expect(wrapper.props().modelValue.visible).toBe(true)
-    expect(wrapper.props().modelValue.isMine).toBe(false)
-    expect(wrapper.props().modelValue.isFlagged).toBe(false)
-    expect(wrapper.props().modelValue.row).toBe(0)
-    expect(wrapper.props().modelValue.column).toBe(0)
+    expect(wrapper.findComponent(Cell).props().modelValue.id).toBe(1)
+    expect(wrapper.findComponent(Cell).props().modelValue.visible).toBe(true)
+    expect(wrapper.findComponent(Cell).props().modelValue.isMine).toBe(false)
+    expect(wrapper.findComponent(Cell).props().modelValue.isFlagged).toBe(false)
+    expect(wrapper.findComponent(Cell).props().modelValue.row).toBe(0)
+    expect(wrapper.findComponent(Cell).props().modelValue.column).toBe(0)
   })
 
   it('emits event when cell is clicked', async () => {
