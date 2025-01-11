@@ -63,15 +63,15 @@
     }
   }
 
+  const nearbyMines = computed(() => {
+    return nearbyMineCount(model.value)
+  })
+
   const severityColor = computed(() => {
     if (nearbyMines.value === 1) return 'nearby blue'
     if (nearbyMines.value === 2) return 'nearby yellow'
     if (nearbyMines.value >= 3) return 'nearby dark-red'
     return ''
-  })
-
-  const nearbyMines = computed(() => {
-    return nearbyMineCount(model.value)
   })
 </script>
 <style lang="css" scoped>

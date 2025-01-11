@@ -2,6 +2,7 @@ import { mount } from '@vue/test-utils'
 import { describe, it, expect, vi } from 'vitest'
 import Cell from '../Cell.vue'
 import { createTestingPinia } from '@pinia/testing'
+import { ref } from 'vue'
 
 describe('Cell.vue', () => {
   it('renders cell with correct props', () => {
@@ -88,5 +89,137 @@ describe('Cell.vue', () => {
       },
     })
     expect(wrapper.html()).toContain('flag')
+  })
+
+  it('adds highlight on mousedown', async () => {
+    const wrapper = mount(Cell, {
+      props: {
+        modelValue: {
+          id: 1,
+          visible: true,
+          isMine: false,
+          isFlagged: false,
+          row: 0,
+          column: 0,
+        },
+        disabled: false,
+      },
+      global: {
+        plugins: [createTestingPinia({ createSpy: vi.fn })],
+      },
+    })
+    await wrapper.trigger('mousedown')
+    expect(wrapper.vm.isHighlighted).toBe(true)
+  })
+
+  it('removes highlight on mouseup', async () => {
+    const wrapper = mount(Cell, {
+      props: {
+        modelValue: {
+          id: 1,
+          visible: true,
+          isMine: false,
+          isFlagged: false,
+          row: 0,
+          column: 0,
+        },
+        disabled: false,
+      },
+      global: {
+        plugins: [createTestingPinia({ createSpy: vi.fn })],
+      },
+    })
+    await wrapper.trigger('mousedown')
+    await wrapper.trigger('mouseup')
+    expect(wrapper.vm.isHighlighted).toBe(false)
+  })
+
+  it('removes highlight on mouseleave', async () => {
+    const wrapper = mount(Cell, {
+      props: {
+        modelValue: {
+          id: 1,
+          visible: true,
+          isMine: false,
+          isFlagged: false,
+          row: 0,
+          column: 0,
+        },
+        disabled: false,
+      },
+      global: {
+        plugins: [createTestingPinia({ createSpy: vi.fn })],
+      },
+    })
+    await wrapper.trigger('mousedown')
+    await wrapper.trigger('mouseleave')
+    expect(wrapper.vm.isHighlighted).toBe(false)
+  })
+  it('should toggle isFlagged when setFlagged is called', async () => {
+    const wrapper = mount(Cell, {
+      props: {
+        modelValue: {
+          id: 1,
+          visible: false,
+          isMine: false,
+          isFlagged: false,
+          row: 0,
+          column: 0,
+        },
+        disabled: false,
+      },
+      global: {
+        plugins: [createTestingPinia({ createSpy: vi.fn })],
+      },
+    })
+    const event = new MouseEvent('contextmenu')
+    await wrapper.vm.setFlagged(event)
+    expect(wrapper.vm.modelValue.isFlagged).toBe(true)
+    await wrapper.vm.setFlagged(event)
+    expect(wrapper.vm.modelValue.isFlagged).toBe(false)
+  })
+
+  it('should not toggle isFlagged when disabled', async () => {
+    const wrapper = mount(Cell, {
+      props: {
+        modelValue: {
+          id: 1,
+          visible: false,
+          isMine: false,
+          isFlagged: false,
+          row: 0,
+          column: 0,
+        },
+        disabled: true,
+      },
+      global: {
+        plugins: [createTestingPinia({ createSpy: vi.fn })],
+      },
+    })
+    const event = new MouseEvent('contextmenu')
+    await wrapper.vm.setFlagged(event)
+    expect(wrapper.vm.modelValue.isFlagged).toBe(false)
+  })
+
+  it('should emit cell-flagged event', async () => {
+    const wrapper = mount(Cell, {
+      props: {
+        modelValue: {
+          id: 1,
+          visible: false,
+          isMine: false,
+          isFlagged: false,
+          row: 0,
+          column: 0,
+        },
+        disabled: false,
+      },
+      global: {
+        plugins: [createTestingPinia({ createSpy: vi.fn })],
+      },
+    })
+    const event = new MouseEvent('contextmenu')
+    await wrapper.vm.setFlagged(event)
+    expect(wrapper.emitted()).toHaveProperty('cell-flagged')
   })
 })
