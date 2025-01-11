@@ -1,10 +1,10 @@
 <script setup lang="ts">
-  import { RouterView } from 'vue-router'
+  import Game from './views/Game.vue'
 </script>
 
 <template>
   <div class="content">
-    <RouterView />
+    <Game />
   </div>
 </template>
 
