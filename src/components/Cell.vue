@@ -20,6 +20,7 @@
   import type { Cell } from '@/model/Cell'
   import { ref, type Ref, computed } from 'vue'
   import { useBoardStore } from '@/stores/useBoardStore'
+  import { storeToRefs } from 'pinia'
 
   interface Props {
     disabled: boolean
@@ -32,7 +33,8 @@
     disabled: false,
   })
 
-  const { nearbyMineCount } = useBoardStore()
+  const { nearbyMineCount, moveMine } = useBoardStore()
+  const { firstMoveCompleted } = storeToRefs(useBoardStore())
 
   const emits = defineEmits(['bomb-clicked', 'cell-flagged', 'cell-cleared'])
 
@@ -47,12 +49,16 @@
   const setVisible = () => {
     if (!props.disabled)
       if (!model.value.isFlagged) {
-        if (model.value.isMine) {
+        if (model.value.isMine && !firstMoveCompleted.value) {
+          moveMine(model.value)
+          emits('cell-cleared', model.value)
+        } else if (model.value.isMine) {
           emits('bomb-clicked', model.value)
         } else {
           emits('cell-cleared', model.value)
         }
       }
+    if (!firstMoveCompleted.value) firstMoveCompleted.value = true
   }
 
   const setFlagged = (evt: MouseEvent) => {

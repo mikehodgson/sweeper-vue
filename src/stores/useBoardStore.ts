@@ -10,11 +10,13 @@ export const useBoardStore = defineStore('board', () => {
   const boardColumns: number = 16
   const mineCount: number = 40
   const currentBoard: Ref<Board> = ref({ rows: [] as Row[], active: true } as Board)
+  const firstMoveCompleted: Ref<boolean> = ref(false)
 
   const { createCell } = useCell()
 
   const createBoard = () => {
     let count = 1
+    firstMoveCompleted.value = false
     currentBoard.value = { rows: [], active: true }
     for (let r = 0; r < boardRows; r++) {
       currentBoard.value.rows[r] = { cells: [] }
@@ -37,6 +39,17 @@ export const useBoardStore = defineStore('board', () => {
         currentBoard.value.rows[row].cells[column].isMine = true
       }
     }
+  }
+
+  const moveMine = (cell: Cell) => {
+    cell.isMine = false
+    let row: number
+    let column: number
+    do {
+      row = Math.floor(Math.random() * boardRows)
+      column = Math.floor(Math.random() * boardColumns)
+    } while (currentBoard.value.rows[row].cells[column].isMine)
+    currentBoard.value.rows[row].cells[column].isMine = true
   }
 
   const getNearbyCells = (location: Cell) => {
@@ -94,5 +107,7 @@ export const useBoardStore = defineStore('board', () => {
     nearbyMineCount,
     getNearbyCells,
     clearNearbyCells,
+    firstMoveCompleted,
+    moveMine,
   }
 })
