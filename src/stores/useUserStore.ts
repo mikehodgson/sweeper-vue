@@ -29,8 +29,7 @@ export const useUserStore = defineStore('user', () => {
       if (value) {
         startTimer()
       }
-    },
-    { once: true },
+    }
   )
 
   return {

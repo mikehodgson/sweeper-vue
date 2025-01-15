@@ -14,11 +14,14 @@
 <script setup lang="ts">
   import BoardComponent from '@/components/Board.vue'
   import { useBoardStore } from '@/stores/useBoardStore'
+  import { useUserStore } from '@/stores/useUserStore'
+  import { storeToRefs } from 'pinia'
   import { ref, type Ref } from 'vue'
   import { useI18n } from 'vue-i18n'
 
   const { t } = useI18n()
   const { resetBoard } = useBoardStore()
+  const { firstMoveCompleted } = storeToRefs(useUserStore())
 
   const gameOver: Ref<boolean> = ref(false)
 
@@ -28,6 +31,7 @@
 
   const newGame = () => {
     resetBoard()
+    firstMoveCompleted.value = false
     gameOver.value = false
   }
 
