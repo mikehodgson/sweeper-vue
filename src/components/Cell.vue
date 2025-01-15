@@ -20,6 +20,7 @@
   import type { Cell } from '@/model/Cell'
   import { ref, type Ref, computed } from 'vue'
   import { useBoardStore } from '@/stores/useBoardStore'
+  import { useUserStore } from '@/stores/useUserStore'
   import { storeToRefs } from 'pinia'
 
   interface Props {
@@ -34,7 +35,7 @@
   })
 
   const { nearbyMineCount, moveMine } = useBoardStore()
-  const { firstMoveCompleted } = storeToRefs(useBoardStore())
+  const { firstMoveCompleted } = storeToRefs(useUserStore())
 
   const emits = defineEmits(['bomb-clicked', 'cell-flagged', 'cell-cleared'])
 
@@ -52,6 +53,7 @@
         if (model.value.isMine && !firstMoveCompleted.value) {
           moveMine(model.value)
           emits('cell-cleared', model.value)
+          firstMoveCompleted.value = true
         } else if (model.value.isMine) {
           emits('bomb-clicked', model.value)
         } else {
