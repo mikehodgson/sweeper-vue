@@ -1,4 +1,5 @@
 # sweeper
+![Unit Test Status](https://github.com/mikehodgson/sweeper-vue/actions/workflows/node.js.yml/badge.svg)
 
 This template should help get you started developing with Vue 3 in Vite.
 

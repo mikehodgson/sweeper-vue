@@ -37,6 +37,7 @@ describe('useBoardStore', () => {
     const store = useBoardStore()
     store.createBoard()
     const cell: Cell = store.currentBoard.rows[0].cells[0]
+    cell.isMine = false
     store.clearNearbyCells(cell)
     expect(cell.visible).toBe(true)
   })
