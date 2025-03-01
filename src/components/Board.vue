@@ -8,6 +8,7 @@
           v-model="currentBoard.rows[row_idx].cells[cell_idx]"
           @bomb-clicked="bombFound"
           @cell-cleared="cellCleared"
+          @cell-flagged="cellFlagged"
           :disabled="props.disabled"
         ></CellComponent>
       </template>
@@ -24,7 +25,7 @@
     disabled: boolean
   }
 
-  const { currentBoard } = storeToRefs(useBoardStore())
+  const { currentBoard, isWinner } = storeToRefs(useBoardStore())
   const { clearNearbyCells } = useBoardStore()
 
   const props = withDefaults(defineProps<Props>(), {
@@ -40,5 +41,14 @@
 
   const cellCleared = (cell: Cell) => {
     clearNearbyCells(cell)
+    if (isWinner.value == true) {
+      emits('game-over')
+    }
+  }
+
+  const cellFlagged = () => {
+    if (isWinner.value == true) {
+      emits('game-over')
+    }
   }
 </script>

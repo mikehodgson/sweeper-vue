@@ -97,9 +97,15 @@ export const useBoardStore = defineStore('board', () => {
     return boardColumns * boardRows
   })
 
+  const isWinner = computed(() => {
+    const cells = currentBoard.value.rows.flatMap((row) => row.cells)
+    return cells.every((cell) => (cell.isMine && cell.isFlagged) || (!cell.isMine && cell.visible))
+  })
+
   return {
     boardSize,
     currentBoard,
+    isWinner,
     createBoard,
     resetBoard,
     nearbyMineCount,

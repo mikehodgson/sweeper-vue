@@ -4,7 +4,7 @@ import { ref, watch, type Ref } from 'vue'
 export const useUserStore = defineStore('user', () => {
   const score: Ref<number> = ref(0)
   const startTime: Ref<number> = ref(0)
-  const totalTime: Ref<number> = ref(0)
+  const totalTime: Ref<string> = ref('')
   const firstMoveCompleted: Ref<boolean> = ref(false)
 
   const incrementScore = () => {
@@ -16,11 +16,14 @@ export const useUserStore = defineStore('user', () => {
   }
 
   const startTimer = () => {
+    console.log('startTimer')
     startTime.value = Date.now()
   }
 
   const stopTimer = () => {
-    totalTime.value = Date.now() - startTime.value
+    console.log('stopTimer')
+    totalTime.value = ((Date.now() - startTime.value) / 1000).toFixed(2)
+    console.log(totalTime.value)
   }
 
   watch(
@@ -30,7 +33,7 @@ export const useUserStore = defineStore('user', () => {
         startTimer()
       }
     },
-    { once: true },
+    { immediate: true },
   )
 
   return {

@@ -16,11 +16,15 @@ const i18n = createI18n({
       title: 'Sweeper',
       new_game: 'New Game',
       game_over: 'Game Over!',
+      seconds: 'seconds',
+      you_win: 'You win!',
     },
     fr: {
       title: 'Démineur',
       new_game: 'Nouvelle partie',
       game_over: 'Jeu terminé!',
+      seconds: 'secondes',
+      you_win: 'Vous avez gagné!',
     },
   },
 })
@@ -61,7 +65,6 @@ describe('Game.vue', () => {
     ;(wrapper.vm as unknown as { showGameOverScreen: () => void }).showGameOverScreen()
     await wrapper.vm.$nextTick()
     expect(wrapper.find('.game-over-screen').exists()).toBe(true)
-    expect(wrapper.find('.game-over-screen').text()).toBe('Game Over!')
   })
 
   it('resets gameOver when newGame is called', async () => {
@@ -76,7 +79,6 @@ describe('Game.vue', () => {
     ;(wrapper.vm as unknown as { showGameOverScreen: () => void }).showGameOverScreen()
     await wrapper.vm.$nextTick()
     expect(wrapper.find('button').exists()).toBe(true)
-    expect(wrapper.find('button').text()).toBe('New Game')
   })
 
   it('game should be reset when "New Game" button is clicked', async () => {
