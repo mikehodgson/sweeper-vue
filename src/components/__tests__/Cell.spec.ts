@@ -22,22 +22,11 @@ describe('Cell.vue', () => {
 			},
 		})
 		expect((wrapper.props() as unknown as { modelValue: { id: number } }).modelValue.id).toBe(1)
-		expect(
-			(wrapper.props() as unknown as { modelValue: { visible: boolean } }).modelValue.visible,
-		).toBe(true)
-		expect(
-			(wrapper.props() as unknown as { modelValue: { isMine: boolean } }).modelValue.isMine,
-		).toBe(false)
-		expect(
-			(wrapper.props() as unknown as { modelValue: { isFlagged: boolean } }).modelValue
-				.isFlagged,
-		).toBe(false)
-		expect((wrapper.props() as unknown as { modelValue: { row: number } }).modelValue.row).toBe(
-			0,
-		)
-		expect(
-			(wrapper.props() as unknown as { modelValue: { column: number } }).modelValue.column,
-		).toBe(0)
+		expect((wrapper.props() as unknown as { modelValue: { visible: boolean } }).modelValue.visible).toBe(true)
+		expect((wrapper.props() as unknown as { modelValue: { isMine: boolean } }).modelValue.isMine).toBe(false)
+		expect((wrapper.props() as unknown as { modelValue: { isFlagged: boolean } }).modelValue.isFlagged).toBe(false)
+		expect((wrapper.props() as unknown as { modelValue: { row: number } }).modelValue.row).toBe(0)
+		expect((wrapper.props() as unknown as { modelValue: { column: number } }).modelValue.column).toBe(0)
 	})
 
 	it('emits event when cell is clicked', async () => {
@@ -184,13 +173,9 @@ describe('Cell.vue', () => {
 		})
 		const event: MouseEvent = new MouseEvent('contextmenu')
 		;(wrapper.vm as unknown as { setFlagged: (event: MouseEvent) => boolean }).setFlagged(event)
-		expect(
-			(wrapper.vm as unknown as { modelValue: { isFlagged: boolean } }).modelValue.isFlagged,
-		).toBe(true)
+		expect((wrapper.vm as unknown as { modelValue: { isFlagged: boolean } }).modelValue.isFlagged).toBe(true)
 		;(wrapper.vm as unknown as { setFlagged: (event: MouseEvent) => boolean }).setFlagged(event)
-		expect(
-			(wrapper.vm as unknown as { modelValue: { isFlagged: boolean } }).modelValue.isFlagged,
-		).toBe(false)
+		expect((wrapper.vm as unknown as { modelValue: { isFlagged: boolean } }).modelValue.isFlagged).toBe(false)
 	})
 
 	it('should not toggle isFlagged when disabled', () => {
@@ -212,9 +197,7 @@ describe('Cell.vue', () => {
 		})
 		const event = new MouseEvent('contextmenu')
 		;(wrapper.vm as unknown as { setFlagged: (event: MouseEvent) => boolean }).setFlagged(event)
-		expect(
-			(wrapper.vm as unknown as { modelValue: { isFlagged: boolean } }).modelValue.isFlagged,
-		).toBe(false)
+		expect((wrapper.vm as unknown as { modelValue: { isFlagged: boolean } }).modelValue.isFlagged).toBe(false)
 	})
 
 	it('should emit cell-flagged event', () => {

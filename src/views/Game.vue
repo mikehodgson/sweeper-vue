@@ -4,11 +4,7 @@
 		<h1>{{ t('title') }}</h1>
 		<button type="button" v-if="gameOver" @click="newGame">{{ t('new_game') }}</button>
 	</div>
-	<BoardComponent
-		@game-over="showGameOverScreen"
-		:class="[{ fadeOut: gameOver }]"
-		:disabled="gameOver"
-	/>
+	<BoardComponent @game-over="showGameOverScreen" :class="[{ fadeOut: gameOver }]" :disabled="gameOver" />
 	<div class="game-over-screen" v-if="gameOver">
 		<span v-if="isWinner">{{ t('you_win') }}</span
 		><span v-else>{{ t('game_over') }}</span>

@@ -99,9 +99,7 @@ export const useBoardStore = defineStore('board', () => {
 
 	const isWinner = computed(() => {
 		const cells = currentBoard.value.rows.flatMap((row) => row.cells)
-		return cells.every(
-			(cell) => (cell.isMine && cell.isFlagged) || (!cell.isMine && cell.visible),
-		)
+		return cells.every((cell) => (cell.isMine && cell.isFlagged) || (!cell.isMine && cell.visible))
 	})
 
 	return {

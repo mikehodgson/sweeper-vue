@@ -11,11 +11,9 @@
 	>
 		<span v-if="model.isFlagged" class="flag">🏳️</span>
 		<span v-else-if="model.visible && model.isMine" class="mine">💩</span>
-		<span
-			v-else-if="model.visible && !model.isMine && nearbyMines > 0"
-			:class="severityColor"
-			>{{ nearbyMines }}</span
-		>
+		<span v-else-if="model.visible && !model.isMine && nearbyMines > 0" :class="severityColor">{{
+			nearbyMines
+		}}</span>
 	</div>
 </template>
 <script setup lang="ts">
@@ -68,9 +66,7 @@
 	const setFlagged = (evt: MouseEvent) => {
 		evt.preventDefault()
 		if (!props.disabled) {
-			model.value.isFlagged = !model.value.visible
-				? !model.value.isFlagged
-				: model.value.isFlagged
+			model.value.isFlagged = !model.value.visible ? !model.value.isFlagged : model.value.isFlagged
 			emits('cell-flagged')
 		}
 	}

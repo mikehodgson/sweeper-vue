@@ -18,9 +18,7 @@ describe('useBoardStore', () => {
 	it('adds the correct number of mines', () => {
 		const store = useBoardStore()
 		store.createBoard()
-		const mineCount = store.currentBoard.rows
-			.flatMap((row) => row.cells)
-			.filter((cell) => cell.isMine).length
+		const mineCount = store.currentBoard.rows.flatMap((row) => row.cells).filter((cell) => cell.isMine).length
 		expect(mineCount).toBe(40)
 	})
 
