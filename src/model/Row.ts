@@ -1,7 +1,7 @@
 import { type Cell } from './Cell'
 
 interface Row {
-  cells: Cell[]
+	cells: Cell[]
 }
 
 export { type Row }

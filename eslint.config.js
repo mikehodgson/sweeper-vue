@@ -1,25 +1,23 @@
 import pluginVue from 'eslint-plugin-vue'
-import vueTsEslintConfig from '@vue/eslint-config-typescript'
+import { defineConfigWithVueTs, vueTsConfigs } from '@vue/eslint-config-typescript'
 import pluginVitest from '@vitest/eslint-plugin'
-import skipFormatting from '@vue/eslint-config-prettier/skip-formatting'
+import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended'
 
-export default [
-  {
-    name: 'app/files-to-lint',
-    files: ['**/*.{ts,mts,tsx,vue}'],
-  },
+export default defineConfigWithVueTs(
+	{
+		name: 'app/files-to-lint',
+		files: ['**/*.{ts,mts,tsx,vue}'],
+	},
 
-  {
-    name: 'app/files-to-ignore',
-    ignores: ['**/dist/**', '**/dist-ssr/**', '**/coverage/**'],
-  },
-
-  ...pluginVue.configs['flat/essential'],
-  ...vueTsEslintConfig(),
-
-  {
-    ...pluginVitest.configs.recommended,
-    files: ['src/**/__tests__/*'],
-  },
-  skipFormatting,
-]
+	{
+		name: 'app/files-to-ignore',
+		ignores: ['**/dist/**', '**/dist-ssr/**', '**/coverage/**'],
+	},
+	pluginVue.configs['flat/essential'],
+	vueTsConfigs.recommendedTypeChecked,
+	{
+		...pluginVitest.configs.recommended,
+		files: ['src/**/__tests__/*'],
+	},
+	eslintPluginPrettierRecommended,
+)
