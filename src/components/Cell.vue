@@ -46,21 +46,30 @@
 	const removeHighlight = () => {
 		if (!props.disabled) isHighlighted.value = false
 	}
-
 	const setVisible = () => {
-		if (!props.disabled)
-			if (!model.value.isFlagged) {
-				if (model.value.isMine && !firstMoveCompleted.value) {
-					moveMine(model.value)
-					emits('cell-cleared', model.value)
-					firstMoveCompleted.value = true
-				} else if (model.value.isMine) {
-					emits('bomb-clicked', model.value)
-				} else {
-					emits('cell-cleared', model.value)
-				}
+		// Don't proceed if disabled or flagged
+		if (props.disabled || model.value.isFlagged) {
+			return
+		}
+
+		// Handle first move on a mine
+		if (model.value.isMine && !firstMoveCompleted.value) {
+			moveMine(model.value)
+			emits('cell-cleared', model.value)
+			firstMoveCompleted.value = true
+			return
+		}
+
+		// Handle regular moves
+		if (model.value.isMine) {
+			emits('bomb-clicked', model.value)
+		} else {
+			emits('cell-cleared', model.value)
+			// Mark first move as completed if it hasn't been already
+			if (!firstMoveCompleted.value) {
+				firstMoveCompleted.value = true
 			}
-		if (!firstMoveCompleted.value) firstMoveCompleted.value = true
+		}
 	}
 
 	const setFlagged = (evt: MouseEvent) => {
